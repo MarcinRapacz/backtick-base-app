@@ -45,6 +45,7 @@ export default defineConfig({
   },
   plugins: [
     remix({
+      basename: "/shopify/base-app/",
       ignoredRouteFiles: ["**/.*"],
     }),
     tsconfigPaths(),
