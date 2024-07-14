@@ -28,3 +28,15 @@ jobs:
           push: true
           platforms: linux/amd64,linux/arm64
           tags: ${{ secrets.DOCKER_REGISTRY_USERNAME }}/backtick-base-app:latest,${{ secrets.DOCKER_REGISTRY_USERNAME }}/backtick-base-app:${{ github.ref_name }}
+      - name: Deploy a new version
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.SERVER_HOST }}
+          username: ${{ secrets.SERVER_USERNAME }}
+          key: ${{ secrets.SERVER_PRIVATE_KEY }}
+          port: 22
+          script: |
+            docker pull ${{ secrets.DOCKER_REGISTRY_USERNAME }}/backtick-base-app:latest &&
+            docker stop backtick-base-app &&
+            docker container rm backtick-base-app || true &&
+            docker run -d -p 3000:3000 --name backtick-base-app -e NODE_ENV=production -e PORT=3000 -e APP_ENV=production -e SCOPES=write_products -e SHOPIFY_API_KEY=${{ secrets.SHOPIFY_API_KEY }} -e SHOPIFY_API_SECRET=${{ secrets.SHOPIFY_API_SECRET }} -e SHOPIFY_APP_URL=${{ secrets.SHOPIFY_APP_URL }} mrbacktick/backtick-base-app:latest;
