@@ -1,3 +1,5 @@
 .cache
 build
 node_modules
+prisma/dev.sql
+prisma/*dev.sql*
