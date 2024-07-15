@@ -35,7 +35,6 @@ if (host === "localhost") {
 }
 
 export default defineConfig({
-  base: "/shopify/base-app/public/",
   server: {
     port: Number(process.env.PORT || 3000),
     hmr: hmrConfig,
@@ -46,7 +45,6 @@ export default defineConfig({
   },
   plugins: [
     remix({
-      basename: "/shopify/base-app",
       ignoredRouteFiles: ["**/.*"],
     }),
     tsconfigPaths(),
